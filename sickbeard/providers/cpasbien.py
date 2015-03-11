@@ -51,6 +51,7 @@ class CpasbienProvider(generic.TorrentProvider):
         showNames = show_name_helpers.allPossibleShowNames(show)
         result = []
         for showName in showNames:
+            logger.log(u"DEBUG 1 "+str(showName), logger.DEBUG)
             result.append( showName + " S%02d" % season )
         return result
 
@@ -60,6 +61,7 @@ class CpasbienProvider(generic.TorrentProvider):
 
         showNames = show_name_helpers.allPossibleShowNames(ep_obj.show)
         for showName in showNames:
+            logger.log(u"DEBUG 2 "+str(showName), logger.DEBUG)
             strings.append("%s S%02dE%02d" % ( showName, ep_obj.scene_season, ep_obj.scene_episode) )
             strings.append("%s %dx%d" % ( showName, ep_obj.scene_season, ep_obj.scene_episode ) )
 
@@ -75,8 +77,9 @@ class CpasbienProvider(generic.TorrentProvider):
 
         results = []
         searchUrl = self.url + '/recherche/'
-        
+        logger.log(u"DEBUG 3 "+str(searchUrl), logger.DEBUG)
         data = urllib.urlencode({'champ_recherche': searchString.replace('!','')})
+        logger.log(u"DEBUG 4 "+str(data), logger.DEBUG)
         req = urllib2.Request(searchUrl, data, headers={'User-Agent' : "Mozilla/5.0"})
         try:
             soup = BeautifulSoup( urllib2.urlopen(req) )
@@ -99,9 +102,13 @@ class CpasbienProvider(generic.TorrentProvider):
             except:
                 erlin=1
         for row in resultdiv:
+            logger.log(u"DEBUG 5 "+str(row), logger.DEBUG)
             link = row.find("a", title=True)
-            title = str(link.text).lower().strip()  
+            logger.log(u"DEBUG 6 "+str(link), logger.DEBUG)
+            title = str(link.text).lower().strip()
+            logger.log(u"DEBUG 7 "+str(title), logger.DEBUG)
             pageURL = link['href']
+            logger.log(u"DEBUG 8 "+str(pageURL), logger.DEBUG)
 
             #if "vostfr" in title and ((not show.subtitles) or show.audio_lang == "fr" or french):
             #    continue
